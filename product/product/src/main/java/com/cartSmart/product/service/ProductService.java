@@ -22,11 +22,7 @@ public class ProductService {
     public List<ProductDTO> getAllProducts() {
         List<Product> productList = productRepository.findAll();
         return productList.stream()
-                .map(product -> new ProductDTO(
-                        product.getId(),
-                        product.getName(),
-                        product.getDescription(),
-                        product.isForSale()))
+                .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
     }
 
