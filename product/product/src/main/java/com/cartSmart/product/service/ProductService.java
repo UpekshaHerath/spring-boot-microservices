@@ -3,7 +3,6 @@ package com.cartSmart.product.service;
 import com.cartSmart.product.dto.ProductDTO;
 import com.cartSmart.product.model.Product;
 import com.cartSmart.product.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +32,8 @@ public class ProductService {
 
     public ProductDTO addProduct(ProductDTO productDTO) {
         Product product = modelMapper.map(productDTO, Product.class);
-        product = productRepository.save(product);
-        return modelMapper.map(product, ProductDTO.class);
+        productRepository.save(product);
+        return productDTO;
     }
 
 }
