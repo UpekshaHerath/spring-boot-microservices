@@ -32,4 +32,16 @@ public class ProductService {
         return productDTO;
     }
 
+    public ProductDTO updateProduct(String id, ProductDTO changingProduct) {
+        Product product = productRepository.findById(Integer.parseInt(id)).orElse(null);
+        if (product != null) {
+            product.setId(Integer.parseInt(id));
+            product.setName(changingProduct.getName());
+            product.setDescription(changingProduct.getDescription());
+            product.setForSale(changingProduct.isForSale());
+            productRepository.save(product);
+        }
+        return modelMapper.map(product, ProductDTO.class);
+    }
+
 }

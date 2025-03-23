@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @CrossOrigin
 @RestController
@@ -22,6 +26,12 @@ public class ProductController {
     @PostMapping("/addProduct")
     public ProductDTO addProduct(@RequestBody ProductDTO productDTO) {
         return productService.addProduct(productDTO);
+    }
+
+
+    @PutMapping("/updateProduct/{id}")
+    public ProductDTO updateProduct(@PathVariable String id, @RequestBody ProductDTO changingProduct) {
+        return productService.updateProduct(id, changingProduct);
     }
 
 }
