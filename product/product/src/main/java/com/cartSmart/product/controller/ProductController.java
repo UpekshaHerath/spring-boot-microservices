@@ -3,6 +3,7 @@ package com.cartSmart.product.controller;
 import com.cartSmart.product.dto.ProductDTO;
 import com.cartSmart.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class ProductController {
 
 
     @PutMapping("/updateProduct/{id}")
-    public ProductDTO updateProduct(@PathVariable String id, @RequestBody ProductDTO changingProduct) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer id, @RequestBody ProductDTO changingProduct) {
         return productService.updateProduct(id, changingProduct);
     }
 
