@@ -5,9 +5,6 @@ import com.cartSmart.product.exception.ProductNotFoundException;
 import com.cartSmart.product.model.Product;
 import com.cartSmart.product.repository.ProductRepository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,8 +16,6 @@ import org.modelmapper.ModelMapper;
 
 @Service
 public class ProductService {
-    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -41,15 +36,10 @@ public class ProductService {
     }
 
     public ResponseEntity<ProductDTO> updateProduct(Integer id, ProductDTO changingProduct) {
-        logger.info("Attempting to update product with ID: {}", id);
-
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> {
-                    logger.error("Product with ID {} not found", id);
                     return new ProductNotFoundException("Product with ID " + id + " not found");
                 });
-
-        logger.info("Product with ID {} found. Updating details.", id);
 
         product.setId(id);
         product.setName(changingProduct.getName());
@@ -57,10 +47,19 @@ public class ProductService {
         product.setForSale(changingProduct.isForSale());
         productRepository.save(product);
 
-        logger.info("Product with ID {} successfully updated.", id);
-
         ProductDTO updateProductDTO = modelMapper.map(product, ProductDTO.class);
         return ResponseEntity.ok(updateProductDTO);
+    }
+
+    public ResponseEntity<String> deleteProduct(Integer id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new ProductNotFoundException("Product with ID " + id + " not found");
+                });
+
+        productRepository.delete(product);
+
+        return ResponseEntity.ok("Product with ID " + id + " successfully deleted.");
     }
 
 }
