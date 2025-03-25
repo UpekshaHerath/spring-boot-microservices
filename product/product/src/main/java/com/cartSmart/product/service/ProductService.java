@@ -22,17 +22,30 @@ public class ProductService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<ProductDTO> getAllProducts() {
-        List<Product> productList = productRepository.findAll();
-        return productList.stream()
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        List<ProductDTO> productDTOs = products.stream()
                 .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
+
+        return ResponseEntity.ok(productDTOs);
     }
 
-    public ProductDTO addProduct(ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> getProductById(Integer id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new ProductNotFoundException("Product with ID " + id + " not found");
+                });
+
+        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+        return ResponseEntity.ok(productDTO);
+    }
+
+    public ResponseEntity<String> addProduct(ProductDTO productDTO) {
         Product product = modelMapper.map(productDTO, Product.class);
         productRepository.save(product);
-        return productDTO;
+
+        return ResponseEntity.ok("Product successfully added.");
     }
 
     public ResponseEntity<ProductDTO> updateProduct(Integer id, ProductDTO changingProduct) {

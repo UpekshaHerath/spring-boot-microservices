@@ -10,6 +10,9 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @CrossOrigin
@@ -20,12 +23,17 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/getProducts")
-    public List<ProductDTO> getProducts() {
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/getProductById/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Integer id) {
+        return productService.getProductById(id);
+    }
+
     @PostMapping("/addProduct")
-    public ProductDTO addProduct(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
         return productService.addProduct(productDTO);
     }
 
